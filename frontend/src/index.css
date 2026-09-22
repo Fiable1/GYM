@@ -283,6 +283,7 @@ input, select, textarea, button {
 }
 
 .sidebar-link {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -772,10 +773,47 @@ tr:hover td {
   border-bottom-color: var(--accent);
 }
 
+.menu-btn { display: none; }
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  z-index: 90;
+}
+
+.spark-line {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+
+.page-fade {
+  animation: pageIn 0.4s ease;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (max-width: 768px) {
-  .sidebar { display: none; }
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    transform: translateX(-110%);
+    transition: transform 0.28s ease;
+    z-index: 100;
+    display: flex;
+  }
+  .sidebar.open { transform: none; }
+  .menu-btn { display: inline-flex; }
   .stats-grid { grid-template-columns: 1fr; }
   .charts-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 0 14px; }
+  .page-content { padding: 18px 14px 32px; }
 }
 
 .loading-spinner {

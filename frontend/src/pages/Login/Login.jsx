@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from '../../components/toast';
 import { Dumbbell } from 'lucide-react';
@@ -19,7 +19,7 @@ export default function Login() {
     try {
       const u = await login(email, password);
       toast.success(`Welcome back, ${u.firstName}!`);
-      navigate('/');
+      navigate('/app');
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
@@ -37,7 +37,7 @@ export default function Login() {
             </div>
           </div>
           <h1>PulseForge</h1>
-          <p>Gym Management System</p>
+          <p>Staff portal — the floor still needs you.</p>
         </div>
         <form onSubmit={handleSubmit}>
           {error && <div style={{ background: 'var(--danger-light)', color: 'var(--danger)', padding: '10px 14px', borderRadius: 'var(--radius-sm)', fontSize: 13, marginBottom: 20 }}>{error}</div>}
@@ -52,13 +52,10 @@ export default function Login() {
           <button className="btn btn-primary" type="submit" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+          <p style={{ textAlign: 'center', marginTop: 18, fontSize: 13 }}>
+            <Link to="/">Back to the club site</Link>
+          </p>
         </form>
-        <div style={{ marginTop: 24, padding: '14px 16px', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-sm)', fontSize: 12, color: 'var(--text-muted)' }}>
-          <strong style={{ color: 'var(--text-secondary)' }}>Demo accounts:</strong><br />
-          Owner: owner@pulseforge.io / Pulse@123<br />
-          Admin: admin@pulseforge.io / Pulse@123<br />
-          Member: ethan@pulseforge.io / Member@123
-        </div>
       </div>
     </div>
   );

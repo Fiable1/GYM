@@ -33,6 +33,11 @@ export default function Dashboard() {
 
   return (
     <div>
+      <div className="challenge-banner" style={{ animation: 'pageIn 0.5s ease' }}>
+        <p style={{ color: 'var(--accent)', fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>The club still needs its operators</p>
+        <h2 style={{ fontSize: 22, marginBottom: 6 }}>Every open slot is someone still negotiating with themselves.</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Fill classes. Catch at-risk members. Make today the reason someone stays.</p>
+      </div>
       <div className="stats-grid">
         <StatCard
           icon={<Users size={20} style={{ color: '#6c5ce7' }} />}

@@ -1,8 +1,15 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 
+import PublicLayout from './components/PublicLayout';
 import Layout from './components/Layout';
 import Login from './pages/Login/Login';
+import Home from './pages/public/Home';
+import PublicClasses from './pages/public/PublicClasses';
+import Membership from './pages/public/Membership';
+import Coaches from './pages/public/Coaches';
+import Watch from './pages/public/Watch';
+import Join from './pages/public/Join';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Members from './pages/Members/Members';
 import Plans from './pages/Plans/Plans';
@@ -20,7 +27,14 @@ import Settings from './pages/Settings/Settings';
 import AuditLog from './pages/Settings/AuditLog';
 
 function Protected({ children }) {
-  const { token } = useAuth();
+  const { token, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="login-wrapper">
+        <div className="loading-spinner" />
+      </div>
+    );
+  }
   if (!token) return <Navigate to="/login" replace />;
   return children;
 }
@@ -28,8 +42,26 @@ function Protected({ children }) {
 export default function App() {
   return (
     <Routes>
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/classes" element={<PublicClasses />} />
+        <Route path="/membership" element={<Membership />} />
+        <Route path="/coaches" element={<Coaches />} />
+        <Route path="/watch" element={<Watch />} />
+        <Route path="/join" element={<Join />} />
+      </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="/" element={<Protected><Layout /></Protected>}>
+      {['members', 'plans', 'billing', 'checkins', 'equipment', 'work-orders', 'maintenance', 'pos', 'challenges', 'notifications', 'reports', 'settings', 'audit-log'].map((p) => (
+        <Route key={p} path={`/${p}`} element={<Navigate to={`/app/${p}`} replace />} />
+      ))}
+      <Route
+        path="/app"
+        element={(
+          <Protected>
+            <Layout />
+          </Protected>
+        )}
+      >
         <Route index element={<Dashboard />} />
         <Route path="members" element={<Members />} />
         <Route path="plans" element={<Plans />} />
