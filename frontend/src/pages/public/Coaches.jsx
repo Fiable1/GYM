@@ -26,6 +26,12 @@ const COACHES = [
     img: 'https://images.unsplash.com/photo-1571731956672-f2b9c0dd3d4e?auto=format&fit=crop&w=800&q=80',
     line: 'Numbers, honesty, and a plan that fits a real calendar.',
   },
+  {
+    name: 'Chris Velez',
+    role: 'Performance PT',
+    img: 'https://images.unsplash.com/photo-1571731956672-f2b9c0dd3d4e?auto=format&fit=crop&w=800&q=80',
+    line: 'Numbers, honesty, and a plan that fits a real calendar.',
+  },
 ];
 
 export default function Coaches() {
