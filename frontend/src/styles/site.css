@@ -326,6 +326,7 @@
   overflow: hidden;
   background: #111;
   border: 1px solid var(--site-line);
+  border-radius: 5px;
 }
 
 .need-card img {
@@ -454,6 +455,7 @@
   display: grid;
   grid-template-columns: 1.7fr 1fr;
   gap: 18px;
+  border-radius: 5px;
 }
 
 .yt-player {
