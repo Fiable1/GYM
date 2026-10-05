@@ -1,35 +1,37 @@
 :root {
-  --bg-primary: #0f1117;
-  --bg-secondary: #161921;
-  --bg-card: #1c1f2b;
-  --bg-card-hover: #222639;
-  --bg-input: #1c1f2b;
-  --bg-sidebar: #0d0f15;
-  --border-color: #2a2d3a;
-  --border-focus: #6c5ce7;
-  --text-primary: #f0f0f5;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
-  --accent: #6c5ce7;
-  --accent-hover: #7e6ff0;
-  --accent-light: rgba(108, 92, 231, 0.12);
-  --success: #00d68f;
-  --success-light: rgba(0, 214, 143, 0.12);
-  --warning: #ffaa00;
-  --warning-light: rgba(255, 170, 0, 0.12);
-  --danger: #ff3d71;
-  --danger-light: rgba(255, 61, 113, 0.12);
-  --info: #0095ff;
-  --info-light: rgba(0, 149, 255, 0.12);
+  --bg-primary: #080808;
+  --bg-secondary: #0d0d0d;
+  --bg-card: #101010;
+  --bg-card-hover: #161616;
+  --bg-input: #131313;
+  --bg-sidebar: #060606;
+  --border-color: #262626;
+  --border-focus: #ff4d1c;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --accent: #ff4d1c;
+  --accent-hover: #ff6a3d;
+  --accent-light: rgba(255, 77, 28, 0.12);
+  --accent-ink: #050505;
+  --success: #22c55e;
+  --success-light: rgba(34, 197, 94, 0.12);
+  --warning: #f5a524;
+  --warning-light: rgba(245, 165, 36, 0.12);
+  --danger: #ef4444;
+  --danger-light: rgba(239, 68, 68, 0.12);
+  --info: #3b82f6;
+  --info-light: rgba(59, 130, 246, 0.12);
   --sidebar-width: 260px;
   --topbar-height: 64px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 14px rgba(0,0,0,0.55);
+  --shadow-lg: 0 12px 34px rgba(0,0,0,0.65);
   --transition: 0.2s ease;
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
 }
 
 *, *::before, *::after {
@@ -88,12 +90,12 @@ input, select, textarea, button {
 }
 
 .login-logo h1 {
-  font-size: 28px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
 }
 
 .login-logo p {
@@ -157,14 +159,14 @@ input, select, textarea, button {
 
 .btn-primary {
   background: var(--accent);
-  color: white;
+  color: var(--accent-ink);
   width: 100%;
 }
 
 .btn-primary:hover:not(:disabled) {
   background: var(--accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+  box-shadow: 0 6px 18px rgba(255, 77, 28, 0.35);
 }
 
 .btn-secondary {
@@ -240,21 +242,23 @@ input, select, textarea, button {
 .sidebar-logo .logo-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  background: var(--accent);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--accent-ink);
   font-weight: 800;
   font-size: 16px;
 }
 
 .sidebar-logo h2 {
-  font-size: 17px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .sidebar-logo span {
@@ -337,7 +341,7 @@ input, select, textarea, button {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  background: linear-gradient(135deg, var(--accent), #ff8a4c);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,9 +395,11 @@ input, select, textarea, button {
 }
 
 .topbar-left h1 {
+  font-family: var(--font-display);
   font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .topbar-right {
@@ -832,7 +838,7 @@ tr:hover td {
   height: 36px;
   min-width: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #a78bfa);
+  background: linear-gradient(135deg, var(--accent), #ff8a4c);
   color: white;
   font-weight: 700;
   font-size: 13px;

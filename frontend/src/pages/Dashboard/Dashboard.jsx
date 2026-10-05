@@ -4,7 +4,7 @@ import { StatCard, formatMoney, formatDate } from '../../components/UI';
 import { Users, DollarSign, Fingerprint, Calendar, AlertTriangle, TrendingUp, BarChart3, Clock } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const COLORS = ['#6c5ce7', '#00d68f', '#ffaa00', '#0095ff', '#ff3d71', '#a78bfa'];
+const COLORS = ['#ff4d1c', '#00d68f', '#ffaa00', '#0095ff', '#ff3d71', '#ff8a4c'];
 
 export default function Dashboard() {
   const [dash, setDash] = useState(null);
@@ -40,7 +40,7 @@ export default function Dashboard() {
       </div>
       <div className="stats-grid">
         <StatCard
-          icon={<Users size={20} style={{ color: '#6c5ce7' }} />}
+          icon={<Users size={20} style={{ color: '#ff4d1c' }} />}
           iconBg="var(--accent-light)"
           value={dash.totalMembers}
           label="Total Members"
@@ -72,8 +72,8 @@ export default function Dashboard() {
           changeDir="down"
         />
         <StatCard
-          icon={<TrendingUp size={20} style={{ color: '#a78bfa' }} />}
-          iconBg="rgba(167,139,250,0.12)"
+          icon={<TrendingUp size={20} style={{ color: '#ff8a4c' }} />}
+          iconBg="rgba(255,138,76,0.12)"
           value={formatMoney(dash.pendingRevenue)}
           label="Pending Revenue"
         />
@@ -87,15 +87,15 @@ export default function Dashboard() {
               <AreaChart data={revenue}>
                 <defs>
                   <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6c5ce7" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#6c5ce7" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#ff4d1c" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#ff4d1c" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#2a2d3a" />
                 <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
                 <YAxis stroke="#6b7280" fontSize={12} />
                 <Tooltip contentStyle={{ background: '#1c1f2b', border: '1px solid #2a2d3a', borderRadius: 8, color: '#f0f0f5' }} />
-                <Area type="monotone" dataKey="revenue" stroke="#6c5ce7" fill="url(#grad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="revenue" stroke="#ff4d1c" fill="url(#grad)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -139,10 +139,10 @@ export default function Dashboard() {
           <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
               { label: 'Active Members', value: dash.activeMembers, color: '#00d68f' },
-              { label: 'Active Memberships', value: dash.activeMemberships, color: '#6c5ce7' },
+              { label: 'Active Memberships', value: dash.activeMemberships, color: '#ff4d1c' },
               { label: 'New This Month', value: dash.newMembersMonth, color: '#0095ff' },
               { label: 'Today\'s Sessions', value: dash.todaysSessions, color: '#ffaa00' },
-              { label: 'Total Transactions', value: dash.totalTransactions, color: '#a78bfa' },
+              { label: 'Total Transactions', value: dash.totalTransactions, color: '#ff8a4c' },
               { label: 'Avg Lifetime Value', value: formatMoney(dash.avgLtv), color: '#00d68f' },
             ].map((item) => (
               <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

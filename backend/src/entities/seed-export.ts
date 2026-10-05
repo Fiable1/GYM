@@ -21,3 +21,4 @@ export {
 export { WorkoutPlan, WearableSnapshot, ChurnScore } from './personalization.entities';
 export { Product, Sale, SaleItem, Challenge, ChallengeEntry } from './pos.entities';
 export { NotificationTemplate, Notification, AuditLog } from './communication.entities';
+export { JoinRequest } from './leads.entities';

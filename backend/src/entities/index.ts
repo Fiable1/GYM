@@ -45,6 +45,7 @@ import {
   Notification,
   AuditLog,
 } from './communication.entities';
+import { JoinRequest } from './leads.entities';
 
 export const ENTITIES = [
   Tenant,
@@ -82,4 +83,5 @@ export const ENTITIES = [
   NotificationTemplate,
   Notification,
   AuditLog,
+  JoinRequest,
 ];

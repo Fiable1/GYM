@@ -32,7 +32,7 @@ export default function Checkins() {
       {stats && (
         <div className="stats-grid">
           <StatCard icon={<LogIn size={20} style={{ color: '#00d68f' }} />} iconBg="var(--success-light)" value={stats.today} label="Today's Check-ins" />
-          <StatCard icon={<Fingerprint size={20} style={{ color: '#6c5ce7' }} />} iconBg="var(--accent-light)" value={total} label="Total Check-ins" />
+          <StatCard icon={<Fingerprint size={20} style={{ color: '#ff4d1c' }} />} iconBg="var(--accent-light)" value={total} label="Total Check-ins" />
           <StatCard icon={<AlertTriangle size={20} style={{ color: '#ffaa00' }} />} iconBg="var(--warning-light)" value={checkins.filter(c => c.type === 'TAILGATE').length} label="Tailgate Detections" />
         </div>
       )}

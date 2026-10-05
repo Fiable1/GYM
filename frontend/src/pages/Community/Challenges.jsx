@@ -56,7 +56,7 @@ export default function Challenges() {
 
       <div className="stats-grid">
         <StatCard icon={<Trophy size={20} style={{ color: '#ffaa00' }} />} iconBg="var(--warning-light)" value={total} label="Total Challenges" />
-        <StatCard icon={<Users size={20} style={{ color: '#6c5ce7' }} />} iconBg="var(--accent-light)" value={challenges.filter(c => c.status === 'ACTIVE').length} label="Active Challenges" />
+        <StatCard icon={<Users size={20} style={{ color: '#ff4d1c' }} />} iconBg="var(--accent-light)" value={challenges.filter(c => c.status === 'ACTIVE').length} label="Active Challenges" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>

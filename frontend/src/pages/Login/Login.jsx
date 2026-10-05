@@ -32,7 +32,7 @@ export default function Login() {
       <div className="login-card">
         <div className="login-logo">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}>
-            <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #6c5ce7, #a78bfa)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+            <div style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #ff4d1c, #ff8a4c)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
               <Dumbbell size={22} />
             </div>
           </div>

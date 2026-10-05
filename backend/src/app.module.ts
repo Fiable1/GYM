@@ -15,6 +15,7 @@ import { CommunityModule } from './modules/community/module';
 import { NotificationsModule } from './modules/notifications/module';
 import { ReportsModule } from './modules/reports/module';
 import { SystemModule } from './modules/system/module';
+import { LeadsModule } from './modules/leads/module';
 import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
@@ -43,6 +44,7 @@ import { GatewayModule } from './gateway/gateway.module';
     NotificationsModule,
     ReportsModule,
     SystemModule,
+    LeadsModule,
     GatewayModule,
   ],
 })

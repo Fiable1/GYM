@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Query, Req } from '@nestjs/common';
-import { Roles } from '../../auth/decorators';
+import { Public, Roles } from '../../auth/decorators';
 import { WorkoutPlanService, WearableSnapshotService, ChurnScoreService, PersonalizationEngine } from './service';
+import { ConciergeEngine } from './concierge.service';
+import { LeadService } from '../leads/service';
 import { buildPageQuery, reqContext } from '../../common/helpers';
 import { Role } from '../../common/constants';
 
@@ -59,7 +61,30 @@ export class AiController {
     private readonly engine: PersonalizationEngine,
     private readonly churnSvc: ChurnScoreService,
     private readonly planSvc: WorkoutPlanService,
+    private readonly concierge: ConciergeEngine,
+    private readonly leads: LeadService,
   ) {}
+
+  /**
+   * Public concierge. Answers from live club data and can draft a coach booking.
+   * Identity is optional: visitors get answers, signed-in members get richer replies.
+   */
+  @Public()
+  @Post('concierge')
+  async conciergeReply(@Body() body: { message?: string; email?: string; name?: string }) {
+    const tenantId = await this.leads.resolveTenantId();
+    const reply = await this.concierge.handle(tenantId, body.message || '', {
+      email: body.email,
+      name: body.name,
+    });
+    return reply;
+  }
+
+  @Post('concierge/member')
+  @Roles(Role.MEMBER, Role.TRAINER, Role.OWNER, Role.MANAGER)
+  async conciergeForMember(@Req() req: any, @Body() body: { message?: string }) {
+    return this.concierge.handle(req.user.tenantId, body.message || '', { memberId: req.user.id });
+  }
 
   @Post('generate-plan')
   @Roles(Role.OWNER, Role.MANAGER, Role.TRAINER)

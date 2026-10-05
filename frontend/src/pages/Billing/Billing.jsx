@@ -74,7 +74,7 @@ export default function Billing() {
                 <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
                 <YAxis stroke="#6b7280" fontSize={12} />
                 <Tooltip contentStyle={{ background: '#1c1f2b', border: '1px solid #2a2d3a', borderRadius: 8, color: '#f0f0f5' }} />
-                <Bar dataKey="total" fill="#6c5ce7" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total" fill="#ff4d1c" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

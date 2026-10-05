@@ -1,3 +1,4 @@
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../../components/Reveal';
 import { FLOOR_VIDEOS } from '../../data/videos';
@@ -23,6 +24,78 @@ const WORDS = [
   'You need this more than you think',
 ];
 
+const STATS = [
+  { value: 24, suffix: '/7', label: 'Access when the doubt is loudest', duration: 1500 },
+  { value: 12000, suffix: '+', label: 'Members who stopped waiting', duration: 2000 },
+  { value: 180, suffix: '+', label: 'Coach-led sessions a week', duration: 1600 },
+  { value: 0, suffix: '', label: 'Judgment at the door', duration: 800 },
+];
+
+function formatCount(num) {
+  if (num >= 1000) {
+    const k = num / 1000;
+    return k >= 10 ? Math.floor(k).toString() : k.toFixed(1).replace(/\.0$/, '');
+  }
+  return Math.floor(num).toString();
+}
+
+function CountUp({ value, suffix, duration }) {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const reducedMotion =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion) {
+      setCount(value);
+      setHasAnimated(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            const startTime = Date.now();
+            const animate = () => {
+              const elapsed = Date.now() - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeOut = 1 - Math.pow(1 - progress, 3);
+              setCount(Math.floor(value * easeOut));
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                setCount(value);
+              }
+            };
+            requestAnimationFrame(animate);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [value, duration, hasAnimated]);
+
+  return (
+    <strong ref={ref}>
+      {formatCount(count)}
+      {suffix}
+    </strong>
+  );
+}
+
 export default function Home() {
   const featured = FLOOR_VIDEOS[0];
 
@@ -40,7 +113,7 @@ export default function Home() {
             you need this.
           </h1>
           <p className="lead">
-            The version of you that sleeps deeper, walks taller, and stops negotiating with the alarm is built here —
+            The version of you that sleeps deeper, walks taller, and stops negotiating with the alarm is built here -
             not someday. Today. The floor does not care about your excuses. It will meet you anyway.
           </p>
           <div className="hero-actions">
@@ -59,15 +132,10 @@ export default function Home() {
       </div>
 
       <div className="stats-row">
-        {[
-          ['24/7', 'Access when the doubt is loudest'],
-          ['12k+', 'Members who stopped waiting'],
-          ['180+', 'Coach-led sessions a week'],
-          ['0', 'Judgment at the door'],
-        ].map(([n, l]) => (
-          <div className="stat-block" key={n}>
-            <strong>{n}</strong>
-            <span>{l}</span>
+        {STATS.map((stat, i) => (
+          <div className="stat-block" key={i}>
+            <CountUp value={stat.value} suffix={stat.suffix} duration={stat.duration} />
+            <span>{stat.label}</span>
           </div>
         ))}
       </div>
@@ -75,7 +143,7 @@ export default function Home() {
       <section className="section">
         <div className="section-head">
           <h2>If you feel the ache, that is the invitation.</h2>
-          <p>Fatigue, stiffness, the quiet fear that time is getting ahead of you — that is not dramatic. That is data. PulseForge is the response.</p>
+          <p>Fatigue, stiffness, the quiet fear that time is getting ahead of you - that is not dramatic. That is data. PulseForge is the response.</p>
         </div>
         <div className="need-grid">
           <Reveal>

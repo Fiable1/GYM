@@ -72,7 +72,7 @@ export default function Notifications() {
                   <tr><td colSpan={5} style={{ textAlign: 'center', padding: 40, color: 'var(--text-muted)' }}>No notifications</td></tr>
                 ) : notifications.map(n => (
                   <tr key={n.id}>
-                    <td style={{ fontWeight: 600 }}>{n.title}</td>
+                    <td style={{ fontWeight: 600 }}>{n.subject || n.title}</td>
                     <td><Badge type="info">{n.channel || 'IN_APP'}</Badge></td>
                     <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{n.recipientId?.slice(0, 8) || '—'}...</td>
                     <td><Badge type={n.status === 'SENT' ? 'success' : n.status === 'FAILED' ? 'danger' : 'warning'}>{n.status || 'PENDING'}</Badge></td>

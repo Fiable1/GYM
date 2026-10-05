@@ -1,5 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, Users, CreditCard, Dumbbell, CalendarDays, Fingerprint, ShoppingBag, Trophy, Bell, BarChart3, Settings, LogOut, Shield, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Dumbbell, CalendarDays, Fingerprint, ShoppingBag, Trophy, Bell, BarChart3, Settings, LogOut, Shield, Menu, X, Inbox } from 'lucide-react';
 import { NavLink, Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -14,6 +14,7 @@ const NAV_SECTIONS = [
     title: 'Operations',
     items: [
       { to: '/app/members', label: 'Members', icon: <Users size={18} /> },
+      { to: '/app/join-requests', label: 'Join Requests', icon: <Inbox size={18} /> },
       { to: '/app/plans', label: 'Membership Plans', icon: <CreditCard size={18} /> },
       { to: '/app/checkins', label: 'Access & Check-ins', icon: <Fingerprint size={18} /> },
       { to: '/app/classes', label: 'Classes & Sessions', icon: <CalendarDays size={18} /> },
@@ -47,6 +48,7 @@ const NAV_SECTIONS = [
 const TITLES = {
   '/app': 'Dashboard',
   '/app/members': 'Members',
+  '/app/join-requests': 'Join Requests',
   '/app/plans': 'Membership Plans',
   '/app/checkins': 'Access & Check-ins',
   '/app/classes': 'Classes & Sessions',

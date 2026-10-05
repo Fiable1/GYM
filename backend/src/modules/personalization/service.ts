@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+﻿import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkoutPlan, WearableSnapshot, ChurnScore } from '../../entities/personalization.entities';
@@ -46,7 +46,7 @@ export class PersonalizationEngine {
     const goals = member.goals || 'general fitness';
     const plan: any = {
       memberId,
-      title: `Adaptive plan — ${volume}`,
+      title: `Adaptive plan â€” ${volume}`,
       source: 'AI',
       status: 'ACTIVE',
       progressPercent: 0,
@@ -134,13 +134,13 @@ export class PersonalizationEngine {
     const msg = message.toLowerCase();
     let reply = '';
     if (msg.includes('rest') || msg.includes('recover') || msg.includes('tired')) {
-      reply = 'Great call to prioritize recovery. Take a rest day and focus on sleep (>7h) and hydration. Tomorrow, do a 20-min zone-2 walk. Listen to your body — readiness is the boss.';
+      reply = 'Great call to prioritize recovery. Take a rest day and focus on sleep (>7h) and hydration. Tomorrow, do a 20-min zone-2 walk. Listen to your body â€” readiness is the boss.';
     } else if (msg.includes('protein') || msg.includes('diet') || msg.includes('food') || msg.includes('eat')) {
-      reply = 'Aim for 1.6–2.2 g of protein per kg of bodyweight daily. Spread it across 4 meals. Pair carbs around your training window, and don\'t skip veggies for micronutrients.';
+      reply = 'Aim for 1.6â€“2.2 g of protein per kg of bodyweight daily. Spread it across 4 meals. Pair carbs around your training window, and don\'t skip veggies for micronutrients.';
     } else if (msg.includes('weight') || msg.includes('lose') || msg.includes('fat')) {
-      reply = 'Weight loss happens in the kitchen + consistent movement. Target a 300–500 kcal daily deficit, 8–12k steps, and 3–4 resistance sessions weekly. I can adjust your plan intensity.';
+      reply = 'Weight loss happens in the kitchen + consistent movement. Target a 300â€“500 kcal daily deficit, 8â€“12k steps, and 3â€“4 resistance sessions weekly. I can adjust your plan intensity.';
     } else if (msg.includes('muscle') || msg.includes('gain') || msg.includes('build')) {
-      reply = 'To build muscle: progressive overload is key. Increase weight or reps every 2 weeks, 0.8–1.6g/kg protein, and 7–9h sleep. Your plan already has strength movements — want me to bump volume?';
+      reply = 'To build muscle: progressive overload is key. Increase weight or reps every 2 weeks, 0.8â€“1.6g/kg protein, and 7â€“9h sleep. Your plan already has strength movements â€” want me to bump volume?';
     } else if (msg.includes('plan') || msg.includes('workout')) {
       reply = 'Here\'s your current focus: 4 sessions/week with strength + conditioning. Based on your last readiness (see dashboard), I\'d suggest keeping moderate volume this week.';
     } else {
@@ -163,8 +163,8 @@ export class PersonalizationEngine {
         ? latest.trainingReadiness >= 75
           ? 'Ready for high-intensity training today'
           : latest.trainingReadiness >= 50
-            ? 'Good to train — moderate intensity recommended'
-            : 'Prioritise recovery — light movement and sleep today'
+            ? 'Good to train â€” moderate intensity recommended'
+            : 'Prioritise recovery â€” light movement and sleep today'
         : 'Connect a wearable to see your daily readiness',
     };
   }

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+﻿import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 
 import PublicLayout from './components/PublicLayout';
@@ -12,6 +12,7 @@ import Watch from './pages/public/Watch';
 import Join from './pages/public/Join';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Members from './pages/Members/Members';
+import JoinRequests from './pages/Members/JoinRequests';
 import Plans from './pages/Plans/Plans';
 import Billing from './pages/Billing/Billing';
 import Classes from './pages/Scheduling/Classes';
@@ -51,7 +52,7 @@ export default function App() {
         <Route path="/join" element={<Join />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      {['members', 'plans', 'billing', 'checkins', 'equipment', 'work-orders', 'maintenance', 'pos', 'challenges', 'notifications', 'reports', 'settings', 'audit-log'].map((p) => (
+      {['members', 'join-requests', 'plans', 'billing', 'checkins', 'equipment', 'work-orders', 'maintenance', 'pos', 'challenges', 'notifications', 'reports', 'settings', 'audit-log'].map((p) => (
         <Route key={p} path={`/${p}`} element={<Navigate to={`/app/${p}`} replace />} />
       ))}
       <Route
@@ -63,7 +64,8 @@ export default function App() {
         )}
       >
         <Route index element={<Dashboard />} />
-        <Route path="members" element={<Members />} />
+<Route path="members" element={<Members />} />
+        <Route path="join-requests" element={<JoinRequests />} />
         <Route path="plans" element={<Plans />} />
         <Route path="billing" element={<Billing />} />
         <Route path="classes" element={<Classes />} />
@@ -82,3 +84,4 @@ export default function App() {
     </Routes>
   );
 }
+

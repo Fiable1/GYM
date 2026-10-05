@@ -13,7 +13,15 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    // The API returns paginated payloads as { items, total, page, limit, totalPages }.
+    // Admin pages read `res.data.data`, so alias it here rather than in every page.
+    const body = res.data;
+    if (body && typeof body === 'object' && !Array.isArray(body) && Array.isArray(body.items)) {
+      res.data = { ...body, data: body.items };
+    }
+    return res;
+  },
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('pf_token');

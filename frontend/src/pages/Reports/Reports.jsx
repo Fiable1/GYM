@@ -4,7 +4,7 @@ import { StatCard, formatMoney, PageHeader } from '../../components/UI';
 import { Users, DollarSign, Activity, TrendingUp, BarChart3 } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const COLORS = ['#6c5ce7', '#00d68f', '#ffaa00', '#0095ff', '#ff3d71', '#a78bfa'];
+const COLORS = ['#ff4d1c', '#00d68f', '#ffaa00', '#0095ff', '#ff3d71', '#ff8a4c'];
 
 export default function Reports() {
   const [dashboard, setDashboard] = useState(null);
@@ -37,10 +37,10 @@ export default function Reports() {
       <PageHeader title="Reports & Analytics" />
 
       <div className="stats-grid">
-        <StatCard icon={<Users size={20} style={{ color: '#6c5ce7' }} />} iconBg="var(--accent-light)" value={dashboard?.totalMembers || 0} label="Total Members" />
+        <StatCard icon={<Users size={20} style={{ color: '#ff4d1c' }} />} iconBg="var(--accent-light)" value={dashboard?.totalMembers || 0} label="Total Members" />
         <StatCard icon={<DollarSign size={20} style={{ color: '#00d68f' }} />} iconBg="var(--success-light)" value={formatMoney(dashboard?.totalRevenue)} label="Total Revenue" />
         <StatCard icon={<Activity size={20} style={{ color: '#0095ff' }} />} iconBg="var(--info-light)" value={dashboard?.todayCheckins || 0} label="Today's Check-ins" />
-        <StatCard icon={<TrendingUp size={20} style={{ color: '#a78bfa' }} />} iconBg="rgba(167,139,250,0.12)" value={formatMoney(dashboard?.avgLtv)} label="Avg Lifetime Value" />
+        <StatCard icon={<TrendingUp size={20} style={{ color: '#ff8a4c' }} />} iconBg="rgba(255,138,76,0.12)" value={formatMoney(dashboard?.avgLtv)} label="Avg Lifetime Value" />
       </div>
 
       {lifeline.length > 0 && (
@@ -67,15 +67,15 @@ export default function Reports() {
               <AreaChart data={revenue}>
                 <defs>
                   <linearGradient id="gradRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6c5ce7" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#6c5ce7" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#ff4d1c" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#ff4d1c" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#2a2d3a" />
                 <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
                 <YAxis stroke="#6b7280" fontSize={12} />
                 <Tooltip contentStyle={{ background: '#1c1f2b', border: '1px solid #2a2d3a', borderRadius: 8, color: '#f0f0f5' }} />
-                <Area type="monotone" dataKey="revenue" stroke="#6c5ce7" fill="url(#gradRev)" strokeWidth={2} />
+                <Area type="monotone" dataKey="revenue" stroke="#ff4d1c" fill="url(#gradRev)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
