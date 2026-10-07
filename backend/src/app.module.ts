@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ENTITIES } from './entities';
+import { buildDataSourceOptions } from './data-source';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './modules/core/module';
@@ -21,16 +21,7 @@ import { GatewayModule } from './gateway/gateway.module';
 @Module({
   imports: [
     CommonModule,
-    TypeOrmModule.forRoot({
-      type: (process.env.DB_TYPE as any) || 'sqljs',
-      database: process.env.DB_PATH || 'data/pulseforge.db',
-      location: process.env.DB_PATH || 'data/pulseforge.db',
-      autoSave: true,
-      useLocalForage: false,
-      entities: ENTITIES,
-      synchronize: true,
-      logging: false,
-    }),
+    TypeOrmModule.forRoot(buildDataSourceOptions()),
     AuthModule,
     CoreModule,
     MembersModule,

@@ -14,7 +14,7 @@
   background: var(--site-bg);
   color: var(--site-ink);
   font-family: Outfit, Inter, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .site a {
@@ -1022,12 +1022,14 @@
   .dock a.active { color: var(--site-ember); }
   .chat-fab { bottom: 84px; right: 14px; width: 52px; height: 52px; }
   .chat-panel {
-    right: 12px;
-    left: 12px;
-    width: auto;
+    left: auto;
+    right: 0;
+    width: min(420px, calc(100vw - 16px));
     bottom: 150px;
     height: 62vh;
     max-height: none;
+    border-right: none;
+    border-radius: 12px 0 0 12px;
   }
   .drawer.open {
     display: flex;

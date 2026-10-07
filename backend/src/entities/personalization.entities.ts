@@ -28,10 +28,10 @@ export class WorkoutPlan extends BaseEntity {
   @Column({ type: 'decimal', precision: 8, scale: 2, default: 0 })
   progressPercent: number = 0;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   startDate?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   endDate?: Date;
 
   @Column({ type: 'int', default: 0 })
@@ -50,7 +50,7 @@ export class WearableSnapshot extends BaseEntity {
   @Column({ length: 60, default: 'APPLE_HEALTH' })
   source: string = 'APPLE_HEALTH';
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   date: Date;
 
   @Column({ type: 'int', nullable: true })
@@ -80,7 +80,7 @@ export class ChurnScore extends BaseEntity {
   @Column({ length: 36 })
   memberId: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   date: Date;
 
   @Column({ type: 'decimal', precision: 5, scale: 2 })

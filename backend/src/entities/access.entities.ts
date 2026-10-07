@@ -19,7 +19,7 @@ export class AccessCredential extends BaseEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   expiresAt?: Date;
 }
 
@@ -33,10 +33,10 @@ export class CheckIn extends BaseEntity {
   @Column({ length: 36, nullable: true })
   locationId?: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   checkInTime: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   checkOutTime?: Date;
 
   @Column({ length: 20, default: 'QR' })

@@ -14,13 +14,13 @@ export abstract class BaseEntity {
   @Column({ type: 'varchar', length: 36, nullable: true })
   tenantId?: string;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: Date })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: Date })
   updatedAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   deletedAt?: Date | null;
 
   @Column({ type: 'varchar', length: 36, nullable: true })

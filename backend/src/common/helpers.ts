@@ -14,3 +14,16 @@ export function buildPageQuery(q: any): PageQuery {
     sortDir: (q.sortDir === 'ASC' ? 'ASC' : 'DESC') as 'ASC' | 'DESC',
   };
 }
+
+function isPostgres(): boolean {
+  const t = (process.env.DB_TYPE || 'sqljs').toLowerCase();
+  return t === 'postgres' || t === 'postgresql';
+}
+
+export function monthKey(expr: string): string {
+  return isPostgres() ? `to_char(${expr}, 'YYYY-MM')` : `strftime('%Y-%m', ${expr})`;
+}
+
+export function hourKey(expr: string): string {
+  return isPostgres() ? `to_char(${expr}, 'HH24')` : `strftime('%H', ${expr})`;
+}

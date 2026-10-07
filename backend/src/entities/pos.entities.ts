@@ -53,7 +53,7 @@ export class Sale extends BaseEntity {
   @Column({ length: 60, default: 'POS' })
   saleType: string = 'POS';
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   soldAt: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
@@ -111,10 +111,10 @@ export class Challenge extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   targetValue: number = 0;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   startDate: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   endDate: Date;
 
   @Column({ length: 40, default: 'ACTIVE' })
@@ -142,7 +142,7 @@ export class ChallengeEntry extends BaseEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   score: number = 0;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastUpdatedAt?: Date;
 
   @Column({ type: 'int', default: 0 })

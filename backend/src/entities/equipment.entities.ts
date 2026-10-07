@@ -25,7 +25,7 @@ export class EquipmentAsset extends BaseEntity {
   @Column({ length: 40, default: 'ONLINE' })
   status: string = 'ONLINE';
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   purchaseDate?: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
@@ -64,10 +64,10 @@ export class EquipmentAsset extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   lastDiagnostics?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastServiceDate?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   nextServiceDate?: Date;
 }
 
@@ -89,7 +89,7 @@ export class EquipmentSensor extends BaseEntity {
   @Column({ length: 40, default: 'BLE' })
   protocol: string = 'BLE';
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastSeenAt?: Date;
 
   @Column({ type: 'decimal', precision: 8, scale: 2, nullable: true })
@@ -112,7 +112,7 @@ export class EquipmentUsageLog extends BaseEntity {
   @Column({ length: 36 })
   assetId: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   timestamp: Date;
 
   @Column({ type: 'int', default: 0 })
@@ -154,10 +154,10 @@ export class MaintenanceSchedule extends BaseEntity {
   @Column({ type: 'int', nullable: true })
   intervalUsageHours?: number;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastExecutedAt?: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   nextDueAt: Date;
 
   @Column({ length: 40, default: 'ACTIVE' })
@@ -200,10 +200,10 @@ export class WorkOrder extends BaseEntity {
   @Column({ length: 36, nullable: true })
   reportedById?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   scheduledAt?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   completedAt?: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })

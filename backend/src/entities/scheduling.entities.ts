@@ -52,10 +52,10 @@ export class Session extends BaseEntity {
   @Column({ length: 36, nullable: true })
   locationId?: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   startTime: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   endTime: Date;
 
   @Column({ type: 'int', default: 20 })
@@ -101,7 +101,7 @@ export class Booking extends BaseEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   amountPaid: number = 0;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   cancelledAt?: Date;
 
   @Column({ length: 200, nullable: true })

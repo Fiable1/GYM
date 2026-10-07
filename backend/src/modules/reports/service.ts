@@ -6,6 +6,7 @@ import { Invoice, Transaction } from '../../entities/billing.entities';
 import { CheckIn } from '../../entities/access.entities';
 import { Session, Booking } from '../../entities/scheduling.entities';
 import { ChurnScore } from '../../entities/personalization.entities';
+import { monthKey } from '../../common/helpers';
 
 @Injectable()
 export class ReportsService {
@@ -87,10 +88,10 @@ export class ReportsService {
     const rows = await this.invoiceRepo.createQueryBuilder('i')
       .where('i.tenantId = :t', { t: tenantId })
       .andWhere("i.status IN ('PAID','PARTIAL')")
-      .select("strftime('%Y-%m', i.paidAt)", 'month')
+      .select(monthKey('i.paidAt'), 'month')
       .addSelect('COALESCE(SUM(i.total),0)', 'revenue')
       .addSelect('COUNT(*)', 'invoices')
-      .groupBy("strftime('%Y-%m', i.paidAt)")
+      .groupBy(monthKey('i.paidAt'))
       .orderBy('month', 'ASC')
       .limit(months)
       .getRawMany();
@@ -101,9 +102,9 @@ export class ReportsService {
     const created = await this.memberRepo
       .createQueryBuilder('m')
       .where('m.tenantId = :t', { t: tenantId })
-      .select("strftime('%Y-%m', m.createdAt)", 'month')
+      .select(monthKey('m.createdAt'), 'month')
       .addSelect('COUNT(*)', 'count')
-      .groupBy("strftime('%Y-%m', m.createdAt)")
+      .groupBy(monthKey('m.createdAt'))
       .orderBy('month', 'ASC')
       .getRawMany();
     return { cohorts: created.map((c) => ({ month: c.month, members: Number(c.count || 0), retentionRate: 92 })) };

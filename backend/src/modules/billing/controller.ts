@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { Roles } from '../../auth/decorators';
 import { PaymentMethodService, InvoiceService, TransactionService, DunningService } from './service';
-import { buildPageQuery, reqContext } from '../../common/helpers';
+import { buildPageQuery, reqContext, monthKey } from '../../common/helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Invoice, Transaction } from '../../entities/billing.entities';
@@ -59,10 +59,10 @@ export class InvoiceController {
     ]);
     const monthly = await this.repo.createQueryBuilder('i')
       .where('i.tenantId = :t', { t: ctx.tenantId })
-      .select("strftime('%Y-%m', i.paidAt)", 'month')
+      .select(monthKey('i.paidAt'), 'month')
       .addSelect('COALESCE(SUM(i.total),0)', 'total')
       .andWhere("i.paidAt IS NOT NULL")
-      .groupBy("strftime('%Y-%m', i.paidAt)")
+      .groupBy(monthKey('i.paidAt'))
       .orderBy('month', 'DESC')
       .limit(6)
       .getRawMany();

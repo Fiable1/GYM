@@ -5,6 +5,7 @@ import { AccessCredential, CheckIn } from '../../entities/access.entities';
 import { ApiBaseService, AuditService } from '../../common/services';
 import { EventsGateway } from '../../gateway/events.gateway';
 import { Member } from '../../entities/member.entities';
+import { hourKey } from '../../common/helpers';
 
 @Injectable()
 export class AccessCredentialService extends ApiBaseService<AccessCredential> {
@@ -94,9 +95,9 @@ export class CheckInEngine {
       .createQueryBuilder('c')
       .where('c.tenantId = :t', { t: tenantId })
       .andWhere('c.checkInTime >= :since', { since: since.toISOString() })
-      .select("strftime('%H', c.checkInTime)", 'hour')
+      .select(hourKey('c.checkInTime'), 'hour')
       .addSelect('COUNT(*)', 'count')
-      .groupBy("strftime('%H', c.checkInTime)")
+      .groupBy(hourKey('c.checkInTime'))
       .orderBy('count', 'DESC')
       .getRawMany();
 

@@ -22,7 +22,7 @@ export class Member extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   totalVisits: number;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastVisitAt?: Date;
 
   @Column({ type: 'varchar', default: 'ACTIVE' })
@@ -81,16 +81,16 @@ export class Membership extends BaseEntity {
   @Column({ length: 40, default: 'ACTIVE' })
   status: string = 'ACTIVE';
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   startDate: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   endDate?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   nextBillingDate?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   freezeDate?: Date;
 
   @Column({ type: 'int', default: 0 })
@@ -117,7 +117,7 @@ export class Waiver extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   signatureData?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   signedAt?: Date;
 
   @Column({ default: false })
@@ -159,7 +159,7 @@ export class MemberGoal extends BaseEntity {
   @Column({ length: 30, nullable: true })
   unit?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   targetDate?: Date;
 
   @Column({ length: 40, default: 'ACTIVE' })

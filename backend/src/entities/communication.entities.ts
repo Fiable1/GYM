@@ -46,10 +46,10 @@ export class Notification extends BaseEntity {
   @Column({ length: 40, default: 'PENDING' })
   status: string = 'PENDING';
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   sentAt?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   readAt?: Date;
 
   @Column({ default: false })

@@ -38,7 +38,7 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isMfaEnabled: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   lastLoginAt?: Date;
 
   @Column({ type: 'text', nullable: true })

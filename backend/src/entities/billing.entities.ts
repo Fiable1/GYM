@@ -61,13 +61,13 @@ export class Invoice extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   lineItems?: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: Date })
   issuedAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   paidAt?: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   dueDate?: Date;
 
   @Column({ type: 'text', nullable: true })
@@ -128,6 +128,6 @@ export class DunningEvent extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   details?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   nextRetryAt?: Date;
 }

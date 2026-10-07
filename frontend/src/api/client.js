@@ -23,7 +23,8 @@ api.interceptors.response.use(
     return res;
   },
   (err) => {
-    if (err.response?.status === 401) {
+    const isLoginAttempt = err.config?.url?.includes('/auth/login');
+    if (err.response?.status === 401 && !isLoginAttempt) {
       localStorage.removeItem('pf_token');
       localStorage.removeItem('pf_user');
       window.location.href = '/login';

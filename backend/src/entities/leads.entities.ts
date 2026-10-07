@@ -39,7 +39,7 @@ export class JoinRequest extends BaseEntity {
   @Column({ length: 36, nullable: true })
   reviewedBy?: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: Date, nullable: true })
   reviewedAt?: Date;
 
   @Column({ length: 36, nullable: true })
