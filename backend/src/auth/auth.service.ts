@@ -32,6 +32,7 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Invalid credentials');
     if (!user.isActive) throw new ForbiddenException('Account is disabled');
     const valid = await bcrypt.compare(password, user.password);
+    console.log('DEBUG validateUser email=', user.email, 'stored=', user.password, 'valid=', valid);
     if (!valid) throw new UnauthorizedException('Invalid credentials');
     return user;
   }
