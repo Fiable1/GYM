@@ -25,13 +25,27 @@ export function buildDataSourceOptions(): DataSourceOptions {
   }
 
   const dbPath = process.env.DB_PATH || 'data/pulseforge.db';
-  if (!fs.existsSync(path.dirname(dbPath))) {
-    fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+  const dir = path.dirname(dbPath);
+  try {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  } catch {
+    // Read-only filesystem (e.g. Vercel): fall back to the committed db path's directory if present.
   }
+
+  // Only enable auto-save when the target directory is actually writable.
+  let autoSave = true;
+  try {
+    fs.accessSync(dir, fs.constants.W_OK);
+  } catch {
+    autoSave = false;
+  }
+
   return {
     type: 'sqljs',
     location: dbPath,
-    autoSave: true,
+    autoSave,
     useLocalForage: false,
     entities: ENTITIES,
     synchronize: true,

@@ -993,6 +993,14 @@
     grid-template-columns: 1fr;
   }
   .join-form .form-row { grid-template-columns: 1fr; }
+  .join-form {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .join-section { padding-left: 0; padding-right: 0; }
   .stat-block { border-right: none; border-bottom: 1px solid var(--site-line); }
   .plan.featured { transform: none; }
   .dock {
