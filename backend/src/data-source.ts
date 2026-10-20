@@ -42,14 +42,25 @@ export function buildDataSourceOptions(): DataSourceOptions {
     autoSave = false;
   }
 
+  // Pre-load the sql.js WebAssembly binary so Vercel's file tracer includes it
+  // and we don't depend on a (possibly missing) node_modules file at runtime.
+  let wasmBinary: Buffer | undefined;
+  try {
+    wasmBinary = fs.readFileSync(path.join(__dirname, '..', 'data', 'sql-wasm.wasm'));
+  } catch {
+    try {
+      wasmBinary = fs.readFileSync(path.join(process.cwd(), 'data', 'sql-wasm.wasm'));
+    } catch {
+      wasmBinary = undefined;
+    }
+  }
+
   return {
     type: 'sqljs',
     location: dbPath,
     autoSave,
     useLocalForage: false,
-    sqlJsConfig: {
-      locateFile: (file: string) => path.join(__dirname, '..', 'data', file),
-    },
+    sqlJsConfig: wasmBinary ? { wasmBinary } : undefined,
     entities: ENTITIES,
     synchronize: true,
     logging: false,
