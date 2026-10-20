@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "src/main.ts": {
+      "includeFiles": "data/sql-wasm.wasm"
+    }
+  }
+}

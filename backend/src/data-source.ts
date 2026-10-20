@@ -48,7 +48,7 @@ export function buildDataSourceOptions(): DataSourceOptions {
     autoSave,
     useLocalForage: false,
     sqlJsConfig: {
-      locateFile: (file: string) => `data/${file}`,
+      locateFile: (file: string) => path.join(__dirname, '..', 'data', file),
     },
     entities: ENTITIES,
     synchronize: true,
