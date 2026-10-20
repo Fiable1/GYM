@@ -60,6 +60,12 @@ async function seed() {
   await dataSource.initialize();
   console.log('DB initialized');
 
+  // Clear existing data so re-seeding is idempotent.
+  for (const entity of [...dataSource.entityMetadatas].reverse()) {
+    await dataSource.getRepository(entity.target as any).clear();
+  }
+  console.log('Existing data cleared');
+
   const r = (name: any) => dataSource.getRepository(name);
   const tenant = await r(Tenant).save({
     id: uuid(), name: 'PulseForge HQ', legalName: 'PulseForge Fitness Ltd',
@@ -74,10 +80,9 @@ async function seed() {
   const userRepo = r(User);
   const hash = (p: string) => bcrypt.hashSync(p, 10);
 
-  await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Ava', lastName: 'Sterling', email: 'owner@pulseforge.io', password: hash('Pulse@123'), role: Role.OWNER, language: 'en', isActive: true } as any);
+  await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Ava', lastName: 'Sterling', email: 'fiablemunezero@gmail.com', password: hash('11Andyogfifi'), role: Role.SUPER_ADMIN, language: 'en', isActive: true } as any);
   await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Marcus', lastName: 'Reed', email: 'manager@pulseforge.io', password: hash('Pulse@123'), role: Role.MANAGER, language: 'en', locationId: loc.id, isActive: true } as any);
   await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Lena', lastName: 'Torres', email: 'staff@pulseforge.io', password: hash('Pulse@123'), role: Role.STAFF, language: 'es', locationId: loc.id, isActive: true } as any);
-  await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Pulse', lastName: 'Admin', email: 'admin@pulseforge.io', password: hash('Pulse@123'), role: Role.SUPER_ADMIN, language: 'en', isActive: true } as any);
   await userRepo.save({ id: uuid(), tenantId: t, firstName: 'Owen', lastName: 'Peterson', email: 'tech@pulseforge.io', password: hash('Pulse@123'), role: Role.MAINTENANCE_TECH, language: 'en', locationId: loc.id, isActive: true } as any);
 
   const trainers = [];
@@ -357,8 +362,7 @@ async function seed() {
   console.log('Tenant:     ', t);
   console.log('Location:   ', loc.name);
   console.log('Sign-in credentials:');
-  console.log('  Super Admin  ->  admin@pulseforge.io  /  Pulse@123');
-  console.log('  Owner        ->  owner@pulseforge.io  /  Pulse@123');
+  console.log('  Super Admin  ->  fiablemunezero@gmail.com  /  11Andyogfifi');
   console.log('  Manager      ->  manager@pulseforge.io / Pulse@123');
   console.log('  Staff        ->  staff@pulseforge.io  /  Pulse@123');
   console.log('  Trainer      ->  diego.ramirez@pulseforge.io / Pulse@123');

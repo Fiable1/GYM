@@ -13,19 +13,19 @@ const NAV_SECTIONS = [
   {
     title: 'Operations',
     items: [
-      { to: '/app/members', label: 'Members', icon: <Users size={18} /> },
-      { to: '/app/join-requests', label: 'Join Requests', icon: <Inbox size={18} /> },
-      { to: '/app/plans', label: 'Membership Plans', icon: <CreditCard size={18} /> },
-      { to: '/app/checkins', label: 'Access & Check-ins', icon: <Fingerprint size={18} /> },
+      { to: '/app/members', label: 'Members', icon: <Users size={18} />, staffOnly: true },
+      { to: '/app/join-requests', label: 'Join Requests', icon: <Inbox size={18} />, staffOnly: true },
+      { to: '/app/plans', label: 'Membership Plans', icon: <CreditCard size={18} />, staffOnly: true },
+      { to: '/app/checkins', label: 'Access & Check-ins', icon: <Fingerprint size={18} />, staffOnly: true },
       { to: '/app/classes', label: 'Classes & Sessions', icon: <CalendarDays size={18} /> },
-      { to: '/app/equipment', label: 'Equipment', icon: <Dumbbell size={18} /> },
+      { to: '/app/equipment', label: 'Equipment', icon: <Dumbbell size={18} />, staffOnly: true },
     ],
   },
   {
     title: 'Commerce',
     items: [
-      { to: '/app/billing', label: 'Billing & Invoices', icon: <CreditCard size={18} /> },
-      { to: '/app/pos', label: 'Shop & Inventory', icon: <ShoppingBag size={18} /> },
+      { to: '/app/billing', label: 'Billing & Invoices', icon: <CreditCard size={18} />, staffOnly: true },
+      { to: '/app/pos', label: 'Shop & Inventory', icon: <ShoppingBag size={18} />, staffOnly: true },
     ],
   },
   {
@@ -33,14 +33,14 @@ const NAV_SECTIONS = [
     items: [
       { to: '/app/challenges', label: 'Community', icon: <Trophy size={18} /> },
       { to: '/app/notifications', label: 'Notifications', icon: <Bell size={18} /> },
-      { to: '/app/reports', label: 'Reports', icon: <BarChart3 size={18} /> },
+      { to: '/app/reports', label: 'Reports', icon: <BarChart3 size={18} />, staffOnly: true },
     ],
   },
   {
     title: 'System',
     items: [
       { to: '/app/settings', label: 'Settings', icon: <Settings size={18} /> },
-      { to: '/app/audit-log', label: 'Audit Log', icon: <Shield size={18} /> },
+      { to: '/app/audit-log', label: 'Audit Log', icon: <Shield size={18} />, staffOnly: true },
     ],
   },
 ];
@@ -73,6 +73,7 @@ const SPARKS = [
 
 export default function Layout() {
   const { user, logout } = useAuth();
+  const isMember = user?.role === 'MEMBER';
   const navigate = useNavigate();
   const location = useLocation();
   const [greeting, setGreeting] = useState('');
@@ -109,22 +110,26 @@ export default function Layout() {
           </div>
         </div>
         <nav className="sidebar-nav">
-          {NAV_SECTIONS.map((section) => (
-            <div className="sidebar-section" key={section.title}>
-              <div className="sidebar-section-title">{section.title}</div>
-              {section.items.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </NavLink>
-              ))}
-            </div>
-          ))}
+          {NAV_SECTIONS.map((section) => {
+            const visibleItems = section.items.filter((item) => !(item.staffOnly && isMember));
+            if (visibleItems.length === 0) return null;
+            return (
+              <div className="sidebar-section" key={section.title}>
+                <div className="sidebar-section-title">{section.title}</div>
+                {visibleItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            );
+          })}
         </nav>
         <div className="sidebar-user">
           <div className="avatar">{user?.firstName?.[0] || user?.email?.[0] || 'U'}</div>

@@ -18,6 +18,18 @@ export class AuthController {
     return this.authService.register(body);
   }
 
+  @Public()
+  @Post('forgot-password')
+  forgotPassword(@Body() body: { email: string }) {
+    return this.authService.requestPasswordReset(body?.email);
+  }
+
+  @Public()
+  @Post('reset-password')
+  resetPassword(@Body() body: { token: string; password: string }) {
+    return this.authService.resetPassword(body?.token, body?.password);
+  }
+
   @Get('me')
   me(@CurrentUser() user: AuthUser) {
     return this.authService.me(user);

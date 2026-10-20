@@ -8,10 +8,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
+import * as crypto from 'crypto';
 import { User } from '../entities/user.entity';
 import { Tenant } from '../entities/core.entities';
 import { Role } from '../common/constants';
 import { AuthUser } from './decorators';
+import { MailService } from '../common/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +21,7 @@ export class AuthService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Tenant) private readonly tenantRepo: Repository<Tenant>,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -90,6 +93,66 @@ export class AuthService {
       return { verified: true, message: 'MFA verified' };
     }
     throw new BadRequestException('Invalid verification code');
+  }
+
+  async requestPasswordReset(email: string) {
+    const normalized = (email || '').toLowerCase().trim();
+    if (!normalized) {
+      return { message: 'If an account exists for that email, a reset link has been sent.' };
+    }
+
+    const user = await this.userRepo.findOne({ where: { email: normalized } });
+    if (user && user.isActive) {
+      const token = crypto.randomBytes(32).toString('hex');
+      const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+      user.passwordResetToken = tokenHash;
+      user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000);
+      await this.userRepo.save(user);
+
+      const frontendUrl =
+        process.env.FRONTEND_URL ||
+        (process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',')[0].trim() : '') ||
+        'http://localhost:5173';
+      const resetUrl = `${frontendUrl.replace(/\/$/, '')}/reset-password?token=${token}`;
+
+      const subject = 'Reset your PulseForge password';
+      const text = [
+        `Hi ${user.firstName || 'there'},`,
+        '',
+        'We received a request to reset your PulseForge password.',
+        'Use the link below to choose a new password. It expires in 1 hour.',
+        '',
+        resetUrl,
+        '',
+        'If you did not request this, you can safely ignore this email.',
+      ].join('\n');
+
+      await this.mailService.send({ to: user.email, subject, text });
+    }
+
+    // Always return a generic response to avoid account enumeration.
+    return { message: 'If an account exists for that email, a reset link has been sent.' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    if (!token) throw new BadRequestException('Reset token is required');
+    if (!newPassword || newPassword.length < 6) {
+      throw new BadRequestException('Password must be at least 6 characters');
+    }
+
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await this.userRepo.findOne({ where: { passwordResetToken: tokenHash } });
+    if (!user || !user.passwordResetExpires || user.passwordResetExpires < new Date()) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.passwordResetToken = null as any;
+    user.passwordResetExpires = null as any;
+    await this.userRepo.save(user);
+
+    return { message: 'Password has been reset successfully. You can now sign in.' };
   }
 
   private sign(user: User) {

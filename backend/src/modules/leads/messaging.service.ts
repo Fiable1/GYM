@@ -36,7 +36,7 @@ export class LeadMessagingService {
   /** Confirmation + status updates always go to the address the visitor typed in. */
   async notifyProspect(tenantId: string, recipientId: string, email: string, lead: {
     name: string; plan: string;
-  }, kind: 'received' | 'approved' | 'rejected', staffNote?: string) {
+  }, kind: 'received' | 'approved' | 'rejected', staffNote?: string, tempPassword?: string) {
     const firstName = lead.name.split(' ')[0];
 
     if (kind === 'received') {
@@ -59,20 +59,28 @@ export class LeadMessagingService {
     }
 
     if (kind === 'approved') {
+      const lines = [
+        `Hi ${firstName},`,
+        '',
+        'Good news: your membership request has been approved.',
+        staffNote ? `A note from our team: ${staffNote}` : '',
+        '',
+      ];
+      if (tempPassword) {
+        lines.push('Your member portal is ready.');
+        lines.push(`Email: ${email}`);
+        lines.push(`Temporary password: ${tempPassword}`);
+        lines.push('Sign in at the portal and change your password after first login (use "Forgot password?" if needed).');
+        lines.push('');
+      }
+      lines.push('Reply to this email or stop by the front desk to book your first session.');
+      lines.push('— PulseForge Athletic Club');
       return this.comms.sendWithEmail(
         tenantId,
         recipientId,
         email,
         'You are in',
-        [
-          `Hi ${firstName},`,
-          '',
-          'Good news: your membership request has been approved.',
-          staffNote ? `A note from our team: ${staffNote}` : '',
-          '',
-          'Reply to this email or stop by the front desk to book your first session.',
-          '— PulseForge Athletic Club',
-        ].filter(Boolean).join('\n'),
+        lines.filter(Boolean).join('\n'),
       );
     }
 

@@ -1,0 +1,1 @@
+SELECT id, "deletedAt" FROM members;

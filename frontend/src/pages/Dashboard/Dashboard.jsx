@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/client';
+import { useAuth } from '../../contexts/AuthContext';
 import { StatCard, formatMoney, formatDate } from '../../components/UI';
 import { Users, DollarSign, Fingerprint, Calendar, AlertTriangle, TrendingUp, BarChart3, Clock } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -7,13 +8,38 @@ import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Cart
 const COLORS = ['#ff4d1c', '#00d68f', '#ffaa00', '#0095ff', '#ff3d71', '#ff8a4c'];
 
 export default function Dashboard() {
+  const { user } = useAuth();
+  const isMember = user?.role === 'MEMBER';
+
   const [dash, setDash] = useState(null);
   const [revenue, setRevenue] = useState([]);
   const [visits, setVisits] = useState([]);
   const [demo, setDemo] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [member, setMember] = useState(null);
+  const [membership, setMembership] = useState(null);
+  const [checkins, setCheckins] = useState([]);
+
   useEffect(() => {
+    if (isMember) {
+      setLoading(true);
+      api.get('/members?limit=100').then(async (r) => {
+        const m = (r.data.data || []).find((x) => x.userId === user.id);
+        setMember(m || null);
+        if (m) {
+          const [ms, ci] = await Promise.all([
+            api.get('/memberships?limit=100').catch(() => ({ data: { data: [] } })),
+            api.get(`/check-ins?memberId=${m.id}&limit=10`).catch(() => ({ data: { data: [] } })),
+          ]);
+          const mems = ms.data.data || ms.data.items || [];
+          setMembership(mems.find((x) => x.memberId === m.id) || null);
+          setCheckins(ci.data.data || ci.data.items || []);
+        }
+      }).finally(() => setLoading(false));
+      return;
+    }
+
     Promise.all([
       api.get('/reports/dashboard'),
       api.get('/reports/revenue?months=6'),
@@ -25,9 +51,71 @@ export default function Dashboard() {
       setVisits(v.data);
       setDemo(dm.data);
     }).finally(() => setLoading(false));
-  }, []);
+  }, [isMember, user?.id]);
 
-  if (loading || !dash) {
+  if (loading) {
+    return <div className="empty-state" style={{ padding: '60px' }}><div className="loading-spinner" /></div>;
+  }
+
+  if (isMember) {
+    return (
+      <div>
+        <div className="challenge-banner" style={{ animation: 'pageIn 0.5s ease' }}>
+          <p style={{ color: 'var(--accent)', fontSize: 12, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>Welcome back</p>
+          <h2 style={{ fontSize: 22, marginBottom: 6 }}>{member ? `${member.firstName} ${member.lastName}` : user?.email}</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Your membership, visits, and activity at a glance.</p>
+        </div>
+
+        {member ? (
+          <>
+            <div className="stats-grid">
+              <StatCard icon={<Users size={20} style={{ color: '#ff4d1c' }} />} iconBg="var(--accent-light)" value={member.status} label="Membership Status" />
+              <StatCard icon={<Fingerprint size={20} style={{ color: '#0095ff' }} />} iconBg="var(--info-light)" value={member.totalVisits || 0} label="Total Visits" />
+              <StatCard icon={<Calendar size={20} style={{ color: '#ffaa00' }} />} iconBg="var(--warning-light)" value={formatDate(member.lastVisitAt) || '—'} label="Last Visit" />
+              <StatCard icon={<TrendingUp size={20} style={{ color: '#00d68f' }} />} iconBg="var(--success-light)" value={membership ? formatMoney(membership.price) : '—'} label="Plan Price" />
+            </div>
+
+            <div className="charts-grid">
+              <div className="card">
+                <div className="card-header"><h3>Membership Details</h3></div>
+                <div className="card-body" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <div><strong>Plan:</strong> {membership?.type || '—'}</div>
+                  <div><strong>Status:</strong> {membership?.status || member.status}</div>
+                  <div><strong>Start:</strong> {formatDate(membership?.startDate) || '—'}</div>
+                  <div><strong>End:</strong> {formatDate(membership?.endDate) || '—'}</div>
+                  <div><strong>Next Billing:</strong> {formatDate(membership?.nextBillingDate) || '—'}</div>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header"><h3>Recent Check-ins</h3></div>
+                <div className="card-body">
+                  {checkins.length === 0 ? (
+                    <p style={{ color: 'var(--text-muted)' }}>No check-ins yet.</p>
+                  ) : (
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {checkins.map((c) => (
+                        <li key={c.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
+                          <span>{formatDate(c.checkInTime)}</span>
+                          <span style={{ color: 'var(--text-secondary)' }}>{c.method || '—'}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="card" style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>
+            No member profile linked to your account yet.
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (!dash) {
     return <div className="empty-state" style={{ padding: '60px' }}><div className="loading-spinner" /></div>;
   }
 

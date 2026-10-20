@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JoinRequest, JOIN_REQUEST_STATUS } from '../../entities/leads.entities';
 import { Member } from '../../entities/member.entities';
+import { AccessCredential } from '../../entities/access.entities';
 import { User } from '../../entities/user.entity';
 import { Tenant } from '../../entities/core.entities';
 import { PageQuery } from '../../common/services';
@@ -22,6 +23,7 @@ export class LeadService {
     @InjectRepository(JoinRequest) private readonly leadRepo: Repository<JoinRequest>,
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Member) private readonly memberRepo: Repository<Member>,
+    @InjectRepository(AccessCredential) private readonly credentialRepo: Repository<AccessCredential>,
     @InjectRepository(Tenant) private readonly tenantRepo: Repository<Tenant>,
     private readonly messaging: LeadMessagingService,
     private readonly audit: AuditService,
@@ -163,10 +165,12 @@ export class LeadService {
     lead.reviewedBy = actorId;
     lead.reviewedAt = new Date();
 
+    let tempPassword: string | undefined;
     if (decision === 'APPROVED' && opts.createAccount) {
       const created = await this.provisionMember(tenantId, lead);
       lead.memberId = created.memberId;
       lead.status = JOIN_REQUEST_STATUS.CONVERTED;
+      tempPassword = created.password;
     }
 
     const saved = await this.leadRepo.save(lead);
@@ -179,6 +183,7 @@ export class LeadService {
         { name: saved.name, plan: saved.plan },
         decision === 'APPROVED' ? 'approved' : 'rejected',
         opts.staffNote,
+        tempPassword,
       )
       .catch(() => null);
 
@@ -206,6 +211,7 @@ export class LeadService {
 
     const [firstName, ...rest] = lead.name.split(/\s+/);
     const lastName = rest.join(' ');
+    const tempPassword = `PulseForge@${Math.floor(100000 + Math.random() * 899999)}`;
 
     const user = await this.userRepo.save(
       this.userRepo.create({
@@ -214,7 +220,7 @@ export class LeadService {
         lastName: lastName || undefined,
         email: lead.email,
         phone: lead.phone,
-        password: await bcrypt.hash(`PulseForge@${Math.floor(100000 + Math.random() * 899999)}`, 10),
+        password: await bcrypt.hash(tempPassword, 10),
         role: 'MEMBER',
         language: 'en',
         isActive: true,
@@ -231,7 +237,17 @@ export class LeadService {
       }),
     );
 
-    return { memberId: member.id, userId: user.id, reused: false };
+    await this.credentialRepo.save(
+      this.credentialRepo.create({
+        tenantId,
+        memberId: member.id,
+        type: 'QR',
+        credentialValue: `PF-MEMBER-${Math.floor(1000 + Math.random() * 9000)}`,
+        isActive: true,
+      } as any),
+    );
+
+    return { memberId: member.id, userId: user.id, reused: false, password: tempPassword };
   }
 
   async resolveTenantId(): Promise<string> {

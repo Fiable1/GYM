@@ -1,9 +1,11 @@
-﻿import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 
 import PublicLayout from './components/PublicLayout';
 import Layout from './components/Layout';
 import Login from './pages/Login/Login';
+import ForgotPassword from './pages/Login/ForgotPassword';
+import ResetPassword from './pages/Login/ResetPassword';
 import Home from './pages/public/Home';
 import PublicClasses from './pages/public/PublicClasses';
 import Membership from './pages/public/Membership';
@@ -52,6 +54,8 @@ export default function App() {
         <Route path="/join" element={<Join />} />
       </Route>
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+  <Route path="/reset-password" element={<ResetPassword />} />
       {['members', 'join-requests', 'plans', 'billing', 'checkins', 'equipment', 'work-orders', 'maintenance', 'pos', 'challenges', 'notifications', 'reports', 'settings', 'audit-log'].map((p) => (
         <Route key={p} path={`/${p}`} element={<Navigate to={`/app/${p}`} replace />} />
       ))}

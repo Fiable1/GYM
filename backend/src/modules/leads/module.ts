@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JoinRequest } from '../../entities/leads.entities';
 import { Member } from '../../entities/member.entities';
+import { AccessCredential } from '../../entities/access.entities';
 import { User } from '../../entities/user.entity';
 import { Tenant } from '../../entities/core.entities';
 import { NotificationsModule } from '../notifications/module';
@@ -11,7 +12,7 @@ import { LeadController } from './controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([JoinRequest, Member, User, Tenant]),
+    TypeOrmModule.forFeature([JoinRequest, Member, User, Tenant, AccessCredential]),
     NotificationsModule,
   ],
   controllers: [LeadController],
