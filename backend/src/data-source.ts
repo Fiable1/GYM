@@ -11,13 +11,43 @@ const dbType = (process.env.DB_TYPE || 'sqljs').toLowerCase();
 
 export function buildDataSourceOptions(): DataSourceOptions {
   if (dbType === 'postgres' || dbType === 'postgresql') {
+    // Prefer a full connection string (e.g. Neon's DATABASE_URL) when present,
+    // falling back to the individual DB_* variables for local Postgres.
+    let host = process.env.DB_HOST || 'localhost';
+    let port = parseInt(process.env.DB_PORT || '5432', 10);
+    let username = process.env.DB_USER || 'pulseforge';
+    let password = process.env.DB_PASSWORD || '';
+    let database = process.env.DB_NAME || 'pulseforge';
+    let sslMode = (process.env.DB_SSLMODE || '').toLowerCase();
+
+    const databaseUrl = process.env.DATABASE_URL;
+    if (databaseUrl) {
+      try {
+        const u = new URL(databaseUrl);
+        host = u.hostname || host;
+        port = parseInt(u.port || String(port), 10);
+        username = decodeURIComponent(u.username || username);
+        password = decodeURIComponent(u.password || password);
+        database = (u.pathname || '').replace(/^\//, '') || database;
+        if (!sslMode) sslMode = (u.searchParams.get('sslmode') || '').toLowerCase();
+      } catch {
+        // Fall back to DB_* variables if the URL cannot be parsed.
+      }
+    }
+
+    const ssl =
+      sslMode === 'require' || sslMode === 'verify-ca' || sslMode === 'verify-full' || host.includes('neon.tech')
+        ? { rejectUnauthorized: false }
+        : undefined;
+
     return {
       type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      username: process.env.DB_USER || 'pulseforge',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'pulseforge',
+      host,
+      port,
+      username,
+      password,
+      database,
+      ssl,
       entities: ENTITIES,
       synchronize: true,
       logging: false,
